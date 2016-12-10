@@ -42,15 +42,30 @@ $(function(){
         var a=$(".news-user-frame"),
         b=a.find("li");
         //绑定鼠标放上去事件
-        $(b).mouseover(function(){//经叶老师测试发现，先隐藏一些再显示一些效果比较稍微好点，待改进，动态感不太足，需要稍微调整下显示和隐藏顺序
+        $("#js-news-user-play li").on('mouseover',function(){//经叶老师测试发现，先隐藏一些再显示一些效果比较稍微好点，待改进，动态感不太足，需要稍微调整下显示和隐藏顺序
             var currentLi=this;
-            if(!($(currentLi).is(":animated")&&$(currentLi).hasClass("isLoaded"))){//如果当前li没有展开,加上已加载的样式是为了稍微防一下鼠标上上去之后多次执行
+            
+            liMouseOver(currentLi);
+        })
+        function liMouseOver(currentLi){
+            console.log("Hover----"+$(currentLi).is(":animated")+$(currentLi).hasClass("isLoaded"));
+/*            if($(currentLi).is(":animated")&&!$(currentLi).hasClass("isLoaded")){
+                setTimeout(DealOver($(currentLi)),200);
+            }*/
+            if(!($(currentLi).is(":animated")||$(currentLi).hasClass("isLoaded"))){//如果当前li没有展开,加上已加载的样式是为了稍微防一下鼠标上上去之后多次执行
+                DealOver($(currentLi));
+            }
+        }
+        function DealOver(currentLi){
+                console.log("Hover----Deal");
+                if($(currentLi).hasClass("isLoaded")){
+                    console.log("Hover--has--isLoaded");
+                    return;
+                }
+                //7、加上已加载的样式
+                $(currentLi).addClass("isLoaded");
                 //1、将其他li下的左下文字部分的透明度设置为1
                 $(currentLi).siblings().find(".user-play-bg-name").animate({opacity:1});
-                //2、将当前li的宽度拉到422px,用300毫秒实现
-                $(currentLi).animate({width:"422px"},300,function(){
-
-                });
                 //2、将其他li的宽度拉到150px,用300毫秒实现
                 $(currentLi).siblings().animate({width:"150px"},300);
                 //3、隐藏其他li的h4
@@ -59,7 +74,10 @@ $(function(){
                 $(currentLi).siblings().find(".user-play-text").hide();
                 //6、将其他li下点击查看的按钮隐藏
                 $(currentLi).siblings().find(".button-user-play").hide();
+                //2、将当前li的宽度拉到422px,用300毫秒实现
+                $(currentLi).animate({width:"422px"},300,function(){
 
+                });
                 //3、显示当前li的h4
                 $(currentLi).find("h4").show();
                 //4、将其他li的左上图片显示
@@ -73,19 +91,21 @@ $(function(){
                  $(currentLi).find(".user-play-text").show();
                  //6、将当前li下点击查看的按钮显示出来
                  $(currentLi).find(".button-user-play").show();
-                //7、加上已加载的样式
-                $(currentLi).addClass("isLoaded");
+
                  //7移除已加载的样式
                  $(currentLi).siblings().removeClass("isLoaded");
              }
-         })
-/*       //绑定对li的鼠标移出事件
+
+       //绑定对li的鼠标移出事件
        function liMouseLeveal(){
+        console.log("mouseleave----");
         if($(b).is(":animated")){
+            console.log("mouseleave----animated");
             setTimeout(function(){
                 liMouseLeveal();
             },500)
         }else{
+         console.log("mouseleave--no--animated");
                 //1、先对所bbbbbbb有的li移除已加载的样式
                 $(b).removeClass("isLoaded");
                 //2、将每个li的左上图片显示，左下文字显示（透明度设为1），左上文字、点击查看按钮隐藏，将h4显示
@@ -95,12 +115,13 @@ $(function(){
                 $(b).find("h4").show();//h4
                 $(b).find(".user-play-bg-name").animate({opacity:1});//左下文字
                 $(b).find(".iocn-user-em").show();//左上图片
+                $(b).siblings().animate({width:"241px"},300);
+                $(b).siblings().find("h4").show();
+
             }
         }
-        $(a).mouseout(function(){
-            liMouseLeveal();
-        })*/
-});
+        $("#js-news-user-play").on('mouseleave',liMouseLeveal);
+    });
 /*$(function() {
     var   m = $("#js-news-user-play li"),
     n = null;
